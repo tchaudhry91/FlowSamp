@@ -16,7 +16,23 @@ def launch():
     # Start Network
     net.start()
 
+    # Get Monitor MAC for Identification
+    monitor = net.get('m1')
+    monitor_mac = monitor.MAC()
+
     # Start FlowSampApp
+    controller = net.get('c0')
+    switch = net.get('sw1')
+
+    switch.cmd('ovs-vsctl set Bridge sw1 protocols=OpenFlow13')
+
+    #controller.cmd('ryu-manager FlowSampRyu.flow_samp &')
+
+    CLI(net)
 
     # Stop Network
     net.stop()
+
+
+if __name__ == "__main__":
+    launch()
