@@ -16,10 +16,6 @@ def launch():
     # Start Network
     net.start()
 
-    # Get Monitor MAC for Identification
-    monitor = net.get('m1')
-    monitor_mac = monitor.MAC()
-
     # Start FlowSampApp
     controller = net.get('c0')
     switch = net.get('sw1')
