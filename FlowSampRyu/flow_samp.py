@@ -56,17 +56,23 @@ class FlowSamp(app_manager.RyuApp):
 
         dst = eth.dst
         src = eth.src
+        
+        if ipv4i is not None:
+            ipv4_src = ipv4i.src
+            ipv4_dst = ipv4i.dst
+        else:
+            ipv4_src = "-"
+            ipv4_dst = "-"
 
         dpid = datapath.id
         self.mac_to_port.setdefault(dpid, {})
 
-        if ipv4i is not None:
-            self.logger.info("packet in %s %s %s %s %s", dpid, src, dst,
-                              ipv4i.src, ipv4i.dst)
-            self.flow_string = self.build_flow_string(dpid, src, dst,
-                                                      ipv4i.src, ipv4i.dst)
+        self.logger.info("packet in %s %s %s %s %s", dpid, src, dst,
+                          ipv4_src, ipv4_dst)
+        self.flow_string = self.build_flow_string(dpid, src, dst,
+                                                  ipv4_src, ipv4_dst)
 
-        # learn a mac address to avoid FLOOD next time.
+        # Learn a mac address to avoid FLOOD next time.
         self.mac_to_port[dpid][src] = in_port
 
         if dst in self.mac_to_port[dpid]:
@@ -94,8 +100,8 @@ class FlowSamp(app_manager.RyuApp):
                 match = parser.OFPMatch(in_port=in_port, eth_dst=dst,
                                         eth_src=src,
                                         eth_type=int('0x0800',0),
-                                        ipv4_dst=ipv4i.dst,
-                                        ipv4_src=ipv4i.src)
+                                        ipv4_dst=ipv4_dst,
+                                        ipv4_src=ipv4_src)
                 print(match)
                 self.add_flow(datapath, 1, match, actions)
                 self.logger.info("Adding Flow...")
