@@ -1,4 +1,5 @@
-import hashlib
+from hashlib import md5
+from struct import unpack
 
 from ryu.base import app_manager
 from ryu.controller import ofp_event
@@ -8,6 +9,8 @@ from ryu.ofproto import ofproto_v1_3
 from ryu.lib.packet import packet
 from ryu.lib.packet import ethernet, ipv4
 
+
+ETHTYPE_IPV4 = 0x0800
 
 class FlowSamp(app_manager.RyuApp):
     OFP_VERSIONS = [ofproto_v1_3.OFP_VERSION]
@@ -99,7 +102,7 @@ class FlowSamp(app_manager.RyuApp):
             if out_port != ofproto.OFPP_FLOOD:
                 match = parser.OFPMatch(in_port=in_port, eth_dst=dst,
                                         eth_src=src,
-                                        eth_type=int('0x0800', 0),
+                                        eth_type=ETHTYPE_IPV4,
                                         ipv4_dst=ipv4_dst,
                                         ipv4_src=ipv4_src)
                 print(match)
@@ -127,7 +130,7 @@ class FlowSamp(app_manager.RyuApp):
         """Checks the new incoming flow and makes a decision based on
            last known monitor load.
         """
-        flow_hash = self.hash_flow(flow_string)
+        flow_hash = hash_flow(flow_string)
         print(flow_hash)
         print(self.accept_limit)
         if flow_hash <= self.accept_limit:
@@ -137,15 +140,16 @@ class FlowSamp(app_manager.RyuApp):
 
     def update_accept_limit(self, percentage):
         """Change the monitor accept percentage to the argument"""
-        max_size = '0xfffff'
+        max_size = 2 ** 32 - 1
         new_size = ((int(max_size, 0)) / float(percentage)) * 100
         self.accept_limit = hex(int(new_size))
         self.logger.info("Accept Limit Changed To %s", percentage)
 
-    def hash_flow(self, flow_string):
-        """Creates an MD5 hash for a particular flow string.
-           Return only first 5 characters of the hash
-        """
-        hasher = hashlib.md5()
-        hasher.update(flow_string)
-        return "0x" + hasher.hexdigest()[:5]
+
+def hash_flow(flow_string):
+    """Creates an MD5 hash for a particular flow string.
+       Return only first 5 characters of the hash
+    """
+    hasher = md5()
+    hasher.update(flow_string)
+    return unpack("!I", hasher.digest()[:4])[0]

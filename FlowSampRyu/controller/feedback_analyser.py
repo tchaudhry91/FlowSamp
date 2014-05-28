@@ -7,7 +7,7 @@ def adjustAcceptLimit(message, limits):
     bottleneck_severity = 0
     parameters = message.parameters
     # Determine the Parameter which is the current bottleneck
-    for k in parameters.keys():
+    for k in parameters:
         if (limits[k] - parameters[k]) > 0:
             if (limits[k] - parameters[k]) < (0.9 * limits[k]):
                 continue
