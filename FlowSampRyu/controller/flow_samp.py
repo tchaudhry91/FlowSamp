@@ -1,5 +1,11 @@
+import socket
+
 from hashlib import md5
 from struct import unpack
+from pickle import loads
+
+from feedback_analyser import adjustAcceptLimit
+from common import feedback_message
 
 from ryu.base import app_manager
 from ryu.controller import ofp_event
@@ -8,9 +14,13 @@ from ryu.controller.handler import set_ev_cls
 from ryu.ofproto import ofproto_v1_3
 from ryu.lib.packet import packet
 from ryu.lib.packet import ethernet, ipv4
+from ryu.lib import hub
 
 
+MAX_MONITORS = 5
+PORT = 12000
 ETHTYPE_IPV4 = 0x0800
+
 
 class FlowSamp(app_manager.RyuApp):
     OFP_VERSIONS = [ofproto_v1_3.OFP_VERSION]
@@ -22,6 +32,7 @@ class FlowSamp(app_manager.RyuApp):
         self.monitor_feedback = None
         self.accept_limit = None
         self.update_accept_limit(100)
+        self.feedback_loop = hub.spawn(self.monitor_feedback_loop)
 
     @set_ev_cls(ofp_event.EventOFPSwitchFeatures, CONFIG_DISPATCHER)
     def switch_features_handler(self, ev):
@@ -141,14 +152,35 @@ class FlowSamp(app_manager.RyuApp):
     def update_accept_limit(self, percentage):
         """Change the monitor accept percentage to the argument"""
         max_size = 2 ** 32 - 1
-        new_size = ((int(max_size, 0)) / float(percentage)) * 100
-        self.accept_limit = hex(int(new_size))
+        new_size = (max_size / float(percentage)) * 100
+        self.accept_limit = new_size
         self.logger.info("Accept Limit Changed To %s", percentage)
+
+    def monitor_feedback_loop(self, port=PORT):
+        """Listens to feedback from monitor
+           Updates Accept Limit based on analysis
+        """
+        ss = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        ss.bind(('', port))
+        ss.listen(MAX_MONITORS)
+        self.logger.info("Listening For Feedback")
+        while True:
+            sock, addr = ss.accept()
+            self.logger.info("Feedback in..")
+            data = ''
+            while True:
+                chunk = sock.recv(4096)
+                if chunk == '':
+                    break
+                else:
+                    data += chunk
+            message = pickle.loads(data)
+            self.update_accept_limit(adjustAcceptLimit(message))
 
 
 def hash_flow(flow_string):
     """Creates an MD5 hash for a particular flow string.
-       Return only first 5 characters of the hash
+       Return only first 4 characters of the hash
     """
     hasher = md5()
     hasher.update(flow_string)
