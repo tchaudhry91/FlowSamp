@@ -4,7 +4,7 @@ from hashlib import md5
 from struct import unpack
 from pickle import loads
 
-from feedback_analyser import adjustAcceptLimit
+from feedback_analyser import adjust_accept_limit
 from common import feedback_message
 
 from ryu.base import app_manager
@@ -31,7 +31,8 @@ class FlowSamp(app_manager.RyuApp):
         self.mac_to_port = {}
         self.monitor_feedback = None
         self.accept_limit = None
-        self.update_accept_limit(100)
+        self.accept_limit_percentage = 100
+        self.update_accept_limit(self.accept_limit_percentage)
         self.feedback_loop = hub.spawn(self.monitor_feedback_loop)
 
     @set_ev_cls(ofp_event.EventOFPSwitchFeatures, CONFIG_DISPATCHER)
@@ -95,7 +96,7 @@ class FlowSamp(app_manager.RyuApp):
             out_port = ofproto.OFPP_FLOOD
 
         actions = None
-        # Add Monitor Decision Mechanism
+        #  Monitor Decision Mechanism
         if ipv4i is not None:
             monitor_flow = True
             monitor_flow = self.flow_decision(self.flow_string)
@@ -175,7 +176,11 @@ class FlowSamp(app_manager.RyuApp):
                 else:
                     data += chunk
             message = pickle.loads(data)
-            self.update_accept_limit(adjustAcceptLimit(message))
+            self.accept_limit_percentage = self.accept_limit_percentage * (
+                    adjustAcceptLimit(message) / float(100))
+            if self.accept_limit_percentage > 100:
+                self.accept_limit_percentage = 100
+            self.update_accept_limit(self.accept_limit_percentage)
 
 
 def hash_flow(flow_string):

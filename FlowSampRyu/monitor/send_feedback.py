@@ -6,7 +6,7 @@ from argparse import ArgumentParser
 from common import feedback_message
 
 
-def sendFeedback(ip, port, interface):
+def send_feedback(ip, port, interface):
     """Build and Send Feedback to the Controller"""
     # Build
     bandwidth = utilisation.link_utilisation(interface)
@@ -27,7 +27,7 @@ if __name__ == "__main__":
     parser.add_argument("monitorInterface")
     args = parser.parse_args()
     while(True):
-        sendFeedback(args.controllerIP,
+        send_feedback(args.controllerIP,
                      int(args.connectionPort),
                      args.monitorInterface)
         sleep(10)
