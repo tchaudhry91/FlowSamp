@@ -10,5 +10,5 @@ def link_utilisation(interface, card_limit=1000):
     output = output.split('\n')
     output = output[-3]
     bps_total = float(output.split(';')[4])
-    utilisation = (bps_total * 800) / (float)(card_limit * 1024 * 1024)
+    utilisation = (bps_total * 800) / float(card_limit * 1024 * 1024)
     return int(utilisation)

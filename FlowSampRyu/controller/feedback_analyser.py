@@ -18,7 +18,7 @@ def adjust_accept_limit(message, limits_config="sample.config", soft_limit=90):
     """
     bottleneck = None
     bottleneck_severity = 0
-    parameters = message.parameters
+    parameters = message
     soft_limit = soft_limit / float(100)
     positive_adjust = False
     hard = False
@@ -26,7 +26,7 @@ def adjust_accept_limit(message, limits_config="sample.config", soft_limit=90):
     limits = parse_limits_file(limits_config)
     # Determine the Parameter which is the current bottleneck
     for k in parameters:
-        if limits[k] == None:
+        if limits[k] is None:
             limits[k] = 90
         if (limits[k] - parameters[k]) > 0:
             if (limits[k] - parameters[k]) < (soft_limit * limits[k]):

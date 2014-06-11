@@ -4,9 +4,6 @@ from hashlib import md5
 from struct import unpack
 from pickle import loads
 
-from feedback_analyser import adjust_accept_limit
-from common import feedback_message
-
 from ryu.base import app_manager
 from ryu.controller import ofp_event
 from ryu.controller.handler import CONFIG_DISPATCHER, MAIN_DISPATCHER
@@ -17,7 +14,6 @@ from ryu.lib.packet import ethernet, ipv4
 from ryu.lib import hub
 
 
-MAX_MONITORS = 5
 PORT = 12000
 ETHTYPE_IPV4 = 0x0800
 
@@ -31,7 +27,7 @@ class FlowSamp(app_manager.RyuApp):
         self.mac_to_port = {}
         self.monitor_feedback = None
         self.accept_limit = None
-        self.accept_limit_percentage = 100
+        self.accept_limit_percentage = 10
         self.update_accept_limit(self.accept_limit_percentage)
         self.feedback_loop = hub.spawn(self.monitor_feedback_loop)
 
@@ -153,7 +149,7 @@ class FlowSamp(app_manager.RyuApp):
     def update_accept_limit(self, percentage):
         """Change the monitor accept percentage to the argument"""
         max_size = 2 ** 32 - 1
-        new_size = (max_size / float(percentage)) * 100
+        new_size = (max_size / float(100)) * percentage
         self.accept_limit = new_size
         self.logger.info("Accept Limit Changed To %s", percentage)
 
@@ -161,26 +157,20 @@ class FlowSamp(app_manager.RyuApp):
         """Listens to feedback from monitor
            Updates Accept Limit based on analysis
         """
-        ss = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        ss = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         ss.bind(('', port))
-        ss.listen(MAX_MONITORS)
         self.logger.info("Listening For Feedback")
         while True:
-            sock, addr = ss.accept()
+            data, addr = ss.recvfrom(4)
             self.logger.info("Feedback in..")
-            data = ''
-            while True:
-                chunk = sock.recv(4096)
-                if chunk == '':
-                    break
-                else:
-                    data += chunk
-            message = pickle.loads(data)
-            self.accept_limit_percentage = self.accept_limit_percentage * (
+            message = unpack("!I", data)
+            print(message)
+            """self.accept_limit_percentage = self.accept_limit_percentage * (
                     adjustAcceptLimit(message) / float(100))
             if self.accept_limit_percentage > 100:
                 self.accept_limit_percentage = 100
             self.update_accept_limit(self.accept_limit_percentage)
+            """
 
 
 def hash_flow(flow_string):

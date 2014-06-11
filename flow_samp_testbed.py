@@ -4,7 +4,7 @@
 from mininet.cli import CLI
 from mininet.node import RemoteController
 from mininet.net import Mininet
-from topology import TestTopo
+from topology import TestTopo, configureRootConnection
 
 
 def launch():
@@ -17,12 +17,14 @@ def launch():
     net.start()
 
     # Start FlowSampApp
-    controller = net.get('c0')
+    root = net.get('root')
+    monitor = net.get('m1')
     switch = net.get('sw1')
 
     switch.cmd('ovs-vsctl set Bridge sw1 protocols=OpenFlow13')
+    configureRootConnection(root, monitor)
 
-    #controller.cmd('ryu-manager FlowSampRyu.flow_samp &')
+    # controller.cmd('ryu-manager FlowSampRyu.controller.flow_samp &')
 
     CLI(net)
 
