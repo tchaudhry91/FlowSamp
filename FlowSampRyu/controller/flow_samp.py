@@ -13,6 +13,8 @@ from ryu.lib.packet import packet
 from ryu.lib.packet import ethernet, ipv4
 from ryu.lib import hub
 
+from feedback_analyser import adjust_accept_limit
+
 
 PORT = 12000
 ETHTYPE_IPV4 = 0x0800
@@ -27,7 +29,7 @@ class FlowSamp(app_manager.RyuApp):
         self.mac_to_port = {}
         self.monitor_feedback = None
         self.accept_limit = None
-        self.accept_limit_percentage = 10
+        self.accept_limit_percentage = 100
         self.update_accept_limit(self.accept_limit_percentage)
         self.feedback_loop = hub.spawn(self.monitor_feedback_loop)
 
@@ -164,13 +166,15 @@ class FlowSamp(app_manager.RyuApp):
             data, addr = ss.recvfrom(4)
             self.logger.info("Feedback in..")
             message = unpack("!I", data)
-            print(message)
-            """self.accept_limit_percentage = self.accept_limit_percentage * (
-                    adjustAcceptLimit(message) / float(100))
+            if self.accpt_limit_percentage == 0:
+                self.accept_limit_percentage = 10 * adjust_accept_limit(
+                                                    message)
+            else:
+                self.accept_limit_percentage *= adjust_accept_limit(
+                                                message)
             if self.accept_limit_percentage > 100:
                 self.accept_limit_percentage = 100
             self.update_accept_limit(self.accept_limit_percentage)
-            """
 
 
 def hash_flow(flow_string):
