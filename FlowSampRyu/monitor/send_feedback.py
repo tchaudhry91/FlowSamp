@@ -1,3 +1,5 @@
+#! /usr/bin/python
+
 import utilisation
 import socket
 import struct
@@ -10,6 +12,8 @@ def send_feedback(socket, ip, port, interface):
     # Build
     bandwidth = utilisation.link_utilisation(interface)
     message = struct.pack("!I", bandwidth)
+    print("Sending..")
+    print(bandwidth)
     sock.sendto(message, (ip, port))
 
 
@@ -26,4 +30,4 @@ if __name__ == "__main__":
         send_feedback(sock, args.controllerIP,
                      int(args.connectionPort),
                      args.monitorInterface)
-        sleep(10)
+        sleep(2)

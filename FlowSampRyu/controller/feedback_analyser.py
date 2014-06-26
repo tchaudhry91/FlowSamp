@@ -9,27 +9,27 @@ def adjust_accept_limit(params,
        Test for proposed idea
     """
     # Add Limit Parse Code
-    limits = (50,) # Dummy Limit
+    limits = (30,) # Dummy Limit
     bottleneck_severity = 0
     bottleneck_limit = 0
     bottleneck_util = 0
-    adapation = 0 
+    adaptation = 0 
     mul = SOFT_MUL
     reduction = False
 
     for i in range(len(params)):
         param_severity = params[i] / limits[i]
-        if param_severity > bottlneck_severity:
+        if param_severity >= bottleneck_severity:
             bottleneck_severity = param_severity
             bottleneck_limit = limits[i] * soft_limit
-            bottleneck_util = param[i]
+            bottleneck_util = params[i]
             if params[i] > (limits[i] * soft_limit):
                 reduction = True
             if params[i] > limits[i]:
                 mul = HARD_MUL
  
-    adpatation = mul * ((bottleneck_limit - bottleneck_utilisation) /
+    adaptation = mul * ((bottleneck_limit - bottleneck_util) /
                          float(bottleneck_limit))
-    if adapation < -1:
+    if adaptation < -1:
         adaptation = -1
     return (1+adaptation)

@@ -29,9 +29,11 @@ class FlowSamp(app_manager.RyuApp):
         self.mac_to_port = {}
         self.monitor_feedback = None
         self.accept_limit = None
-        self.accept_limit_percentage = 100
+        self.accept_limit_percentage = 0
         self.update_accept_limit(self.accept_limit_percentage)
         self.feedback_loop = hub.spawn(self.monitor_feedback_loop)
+        self.monitored_count = 0
+        self.total_count = 0
 
     @set_ev_cls(ofp_event.EventOFPSwitchFeatures, CONFIG_DISPATCHER)
     def switch_features_handler(self, ev):
@@ -80,8 +82,8 @@ class FlowSamp(app_manager.RyuApp):
         dpid = datapath.id
         self.mac_to_port.setdefault(dpid, {})
 
-        self.logger.info("packet in %s %s %s %s %s", dpid, src, dst,
-                          ipv4_src, ipv4_dst)
+        # self.logger.info("packet in %s %s %s %s %s", dpid, src, dst,
+        #                 ipv4_src, ipv4_dst)
         self.flow_string = self.build_flow_string(dpid, src, dst,
                                                   ipv4_src, ipv4_dst)
 
@@ -96,6 +98,7 @@ class FlowSamp(app_manager.RyuApp):
         actions = None
         #  Monitor Decision Mechanism
         if ipv4i is not None:
+            self.total_count += 1
             monitor_flow = True
             monitor_flow = self.flow_decision(self.flow_string)
 
@@ -103,10 +106,11 @@ class FlowSamp(app_manager.RyuApp):
                 # Forward to Monitor As Well
                 actions = [parser.OFPActionOutput(out_port),
                            parser.OFPActionOutput(self.monitor_port)]
-                self.logger.info("Flow Monitored")
+                # self.logger.info("Flow Monitored")
+                self.monitored_count += 1
             else:
                 actions = [parser.OFPActionOutput(out_port)]
-                self.logger.info("Flow Not Monitored")
+                # self.logger.info("Flow Not Monitored")
 
             # install a flow to avoid packet_in next time
             if out_port != ofproto.OFPP_FLOOD:
@@ -115,9 +119,8 @@ class FlowSamp(app_manager.RyuApp):
                                         eth_type=ETHTYPE_IPV4,
                                         ipv4_dst=ipv4_dst,
                                         ipv4_src=ipv4_src)
-                print(match)
                 self.add_flow(datapath, 1, match, actions)
-                self.logger.info("Adding Flow...")
+                # self.logger.info("Adding Flow...")
 
         else:
             actions = [parser.OFPActionOutput(out_port)]
@@ -141,8 +144,6 @@ class FlowSamp(app_manager.RyuApp):
            last known monitor load.
         """
         flow_hash = hash_flow(flow_string)
-        print(flow_hash)
-        print(self.accept_limit)
         if flow_hash <= self.accept_limit:
             return True
         else:
@@ -166,7 +167,8 @@ class FlowSamp(app_manager.RyuApp):
             data, addr = ss.recvfrom(4)
             self.logger.info("Feedback in..")
             message = unpack("!I", data)
-            if self.accpt_limit_percentage == 0:
+            print(message)
+            if self.accept_limit_percentage < 10:
                 self.accept_limit_percentage = 10 * adjust_accept_limit(
                                                     message)
             else:
@@ -175,6 +177,8 @@ class FlowSamp(app_manager.RyuApp):
             if self.accept_limit_percentage > 100:
                 self.accept_limit_percentage = 100
             self.update_accept_limit(self.accept_limit_percentage)
+            print("Total Flows = " + str(self.total_count))
+            print("Total Monitored = " + str(self.monitored_count))
 
 
 def hash_flow(flow_string):

@@ -20,11 +20,14 @@ def launch():
     root = net.get('root')
     monitor = net.get('m1')
     switch = net.get('sw1')
+    source = net.get('s1')
 
     switch.cmd('ovs-vsctl set Bridge sw1 protocols=OpenFlow13')
     configureRootConnection(root, monitor)
 
     # controller.cmd('ryu-manager FlowSampRyu.controller.flow_samp &')
+    # s1.cmd('tcpreplay -i s1-eth0 pcap/13-03-2013-anon.pcap')
+    
 
     CLI(net)
 
