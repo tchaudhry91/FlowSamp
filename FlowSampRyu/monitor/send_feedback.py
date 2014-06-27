@@ -11,9 +11,10 @@ def send_feedback(socket, ip, port, interface):
     """Build and Send Feedback to the Controller"""
     # Build
     bandwidth = utilisation.link_utilisation(interface)
-    message = struct.pack("!I", bandwidth)
-    print("Sending..")
-    print(bandwidth)
+    packets_total = utilisation.packets_total(interface)
+    message = struct.pack("!II", bandwidth, packets_total)
+    print("Bandwidth = " + str(bandwidth))
+    print("Packets Total = " + str(packets_total))
     sock.sendto(message, (ip, port))
 
 

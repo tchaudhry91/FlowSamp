@@ -26,6 +26,7 @@ def launch():
     configureRootConnection(root, monitor)
 
     # controller.cmd('ryu-manager FlowSampRyu.controller.flow_samp &')
+    # monitor.cmd('/FlowSampRyu/monitor/send_feedback.py 10.0.1.2 12000 m1-eth1')
     # s1.cmd('tcpreplay -i s1-eth0 pcap/13-03-2013-anon.pcap')
     
 

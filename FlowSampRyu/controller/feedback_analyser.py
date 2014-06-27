@@ -9,7 +9,7 @@ def adjust_accept_limit(params,
        Test for proposed idea
     """
     # Add Limit Parse Code
-    limits = (30,) # Dummy Limit
+    limits = (30, 30000) # Dummy Limit
     bottleneck_severity = 0
     bottleneck_limit = 0
     bottleneck_util = 0

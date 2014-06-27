@@ -164,9 +164,9 @@ class FlowSamp(app_manager.RyuApp):
         ss.bind(('', port))
         self.logger.info("Listening For Feedback")
         while True:
-            data, addr = ss.recvfrom(4)
+            data, addr = ss.recvfrom(8)
             self.logger.info("Feedback in..")
-            message = unpack("!I", data)
+            message = unpack("!II", data)
             print(message)
             if self.accept_limit_percentage < 10:
                 self.accept_limit_percentage = 10 * adjust_accept_limit(
