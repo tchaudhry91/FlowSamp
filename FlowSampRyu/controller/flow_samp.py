@@ -29,7 +29,7 @@ class FlowSamp(app_manager.RyuApp):
         self.mac_to_port = {}
         self.monitor_feedback = None
         self.accept_limit = None
-        self.accept_limit_percentage = 0
+        self.accept_limit_percentage = 100
         self.update_accept_limit(self.accept_limit_percentage)
         self.feedback_loop = hub.spawn(self.monitor_feedback_loop)
         self.monitored_count = 0
