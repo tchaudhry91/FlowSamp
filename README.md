@@ -13,13 +13,9 @@ The sampling is carried out based on a feedback loop between the controller and 
 Setup and Usage:
 
 Pre-Requisites/Dependencies - mininet
-
                               ryu (Simple installation using 'pip install ryu')
-
                               openvswitch
-
                               bwm-ng
-
                               tcpreplay
 
 Usage:
