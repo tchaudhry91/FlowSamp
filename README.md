@@ -1,13 +1,9 @@
 FlowSamp
 ========
 Source------OFSwitch-----Sink
-
              |    |
-
   Controller_|    |___Monitor
-
        |_______________|
-
          Feedback Link
 
 Flow Samp is a flow sampling application which works by sampling the set of flows to be monitored in a particular topology.
