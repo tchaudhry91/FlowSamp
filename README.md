@@ -1,21 +1,29 @@
 FlowSamp
 ========
 Source------OFSwitch-----Sink
+
              |    |
+
   Controller_|    |___Monitor
+
        |_______________|
+
          Feedback Link
 
 Flow Samp is a flow sampling application which works by sampling the set of flows to be monitored in a particular topology.
 The sampling is carried out based on a feedback loop between the controller and monitor which indicates the current load on the monitor.
 
 
-Setup and Usage
-===============
+Setup and Usage:
+
 Pre-Requisites/Dependencies - mininet
+
                               ryu (Simple installation using 'pip install ryu')
+
                               openvswitch
+
                               bwm-ng
+
                               tcpreplay
 
 Usage:
@@ -28,6 +36,7 @@ For debugging purposes, currently the controller app and the monitor loop are st
 
 *Additional steps to debug/observe controller output
 At the mininet command line, launch the following commands:
+
     xterm c0:
         (inside c0 xterm):
         'ryu-manager FlowSampRyu.controller.flow_samp'
