@@ -7,7 +7,7 @@ from time import sleep
 from argparse import ArgumentParser
 
 
-def send_feedback(socket, ip, port, interface):
+def send_feedback(sock, ip, port, interface):
     """Build and Send Feedback to the Controller"""
     # Build
     bandwidth = utilisation.link_utilisation(interface)
@@ -18,7 +18,8 @@ def send_feedback(socket, ip, port, interface):
     sock.sendto(message, (ip, port))
 
 
-if __name__ == "__main__":
+def main():
+    """The main function"""
     parser = ArgumentParser(description="Send Feedback to Controller")
     parser.add_argument("controllerIP", help="The Controller's IP")
     parser.add_argument("connectionPort",
@@ -27,8 +28,12 @@ if __name__ == "__main__":
     args = parser.parse_args()
     sock = socket.socket(socket.AF_INET,
                          socket.SOCK_DGRAM)
-    while(True):
+    while True:
         send_feedback(sock, args.controllerIP,
                      int(args.connectionPort),
                      args.monitorInterface)
         sleep(2)
+
+
+if __name__ == "__main__":
+    main()
