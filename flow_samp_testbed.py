@@ -5,7 +5,7 @@ from mininet.cli import CLI
 from mininet.node import RemoteController
 from mininet.net import Mininet
 from topology import TestTopo, configureRootConnection
-
+from plotter import start_plotter
 
 def launch():
     """Start The Main Testbed"""
@@ -25,12 +25,11 @@ def launch():
     switch.cmd('ovs-vsctl set Bridge sw1 protocols=OpenFlow13')
     configureRootConnection(root, monitor)
 
-    # controller.cmd('ryu-manager FlowSampRyu.controller.flow_samp &')
-    # monitor.cmd('/FlowSampRyu/monitor/send_feedback.py 10.0.1.2 12000 m1-eth1')
-    # s1.cmd('tcpreplay -i s1-eth0 pcap/13-03-2013-anon.pcap')
-    
+    root.cmd('ryu-manager FlowSampRyu.controller.flow_samp &')
+    monitor.cmd('python2 FlowSampRyu/monitor/send_feedback.py 10.0.1.2 12000 m1-eth0 &')
+    source.cmd('tcpreplay -i s1-eth0 -x 50 pcap/trunk-13-03-2013-anon.pcap &')
 
-    CLI(net)
+    start_plotter('PlotLogs/values.log')
 
     # Stop Network
     net.stop()

@@ -1,0 +1,28 @@
+Adaptation
+
++ Feedback Contents -> Utilisation Percentage (Based on total capacity)
++ Given -> Acceptable limit (Hard Limit)
+
+Proposed Method
++ Find bottleneck
+    Highest utilised parameter based on limit. (Care..45% utilisation out of 50% limit, more severe than 80% of 100% limit)
+    * Because adaptation is simple increase or decrease, only most utilised parameter matters.    
+    severity -> utilisation/limit
+
++ Decide on a soft limit
+    This is a limit below the actual hard limit where the adaptation turns negetive
+    For eg.
+        softlimit = 0.9 * actual_limit
+                    0.9->Variable
+
++ On basis of most severe factor decide adaptation rate as follows
+    - adaptation factor = 1 + (soft_limit - utilisation) / soft limit) 
+        - can be made more drastic by adding a multiplier
+
++ Can add Hard Multiplier
+    - should limit exceed the hard limit the reduction should be more drastic
+    - e.g if original adaptation factor was 0.8, in case of hard exceed, it would be 0.6 (considering hard mul of 2), or 0.4 (considering hard mul of 3)
+
++ Return this adaptation factor and multiply it with the current accept limit
+    (Take care not to exceed 100, overflow)
+

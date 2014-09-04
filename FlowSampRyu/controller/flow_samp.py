@@ -18,6 +18,7 @@ from feedback_analyser import adjust_accept_limit
 
 PORT = 12000
 ETHTYPE_IPV4 = 0x0800
+PLOT_LOG_FILE = 'PlotLogs/values.log'
 
 
 class FlowSamp(app_manager.RyuApp):
@@ -34,6 +35,7 @@ class FlowSamp(app_manager.RyuApp):
         self.feedback_loop = hub.spawn(self.monitor_feedback_loop)
         self.monitored_count = 0
         self.total_count = 0
+        self.plot_logger = open(PLOT_LOG_FILE, 'w')
 
     @set_ev_cls(ofp_event.EventOFPSwitchFeatures, CONFIG_DISPATCHER)
     def switch_features_handler(self, ev):
@@ -170,15 +172,19 @@ class FlowSamp(app_manager.RyuApp):
             print(message)
             if self.accept_limit_percentage < 10:
                 self.accept_limit_percentage = 10 * adjust_accept_limit(
-                                                    message)
+                    message)
             else:
                 self.accept_limit_percentage *= adjust_accept_limit(
-                                                message)
+                    message)
             if self.accept_limit_percentage > 100:
                 self.accept_limit_percentage = 100
             self.update_accept_limit(self.accept_limit_percentage)
             print("Total Flows = " + str(self.total_count))
             print("Total Monitored = " + str(self.monitored_count))
+            logger_string = (str(self.accept_limit_percentage) + ';' +
+                             str(message[0]) + ';' + str(message[1]) + '\n')
+            self.plot_logger.write(logger_string)
+            self.plot_logger.flush()
 
 
 def hash_flow(flow_string):
