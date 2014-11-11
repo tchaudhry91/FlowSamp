@@ -8,8 +8,7 @@ def adjust_accept_limit(params,
     """Determines the accept limit for the flows to the monitor.
        Test for proposed idea
     """
-    # Add Limit Parse Code
-    limits = (30, 90000) # Dummy Limit
+    limits = parse_limits()
     bottleneck_severity = 0
     bottleneck_limit = 0
     bottleneck_util = 0
