@@ -6,6 +6,7 @@ from mininet.node import RemoteController
 from mininet.net import Mininet
 from topology import TestTopo, configureRootConnection
 from plotter import start_plotter
+from argparse import ArgumentParser
 
 def launch():
     """Start The Main Testbed"""
@@ -34,6 +35,12 @@ def launch():
     # Stop Network
     net.stop()
 
+def parse_arguments():
+    """Add and Parse command Line Options"""
+    parser = ArgumentParser()
+    parser.add_argument("pcap", help=("The Pcap Fie you would like to Replay"))
+    parser.add_argument("pcap_multiplier", help=("The rate at which the Pcap should be replayed"))
 
 if __name__ == "__main__":
+    parse_arguments()
     launch()

@@ -56,6 +56,8 @@ def start_plotter(plot_log_file):
         ax2.set_xlabel('Time')
         ax2.set_ylabel('Utilisation')
         ax2.plot(range(count), param0_values[-count:], 'b-')
+
+        #Add Limit Code
         ax2.plot([0, 15], [30, 30], 'r-')
         ax2.set_xlim([0, 15])
         ax2.set_ylim([0, 105])
