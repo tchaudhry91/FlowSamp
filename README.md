@@ -8,7 +8,9 @@ VM Setup Instructions:
 
 - Startup VM (In Virtual Box, Import Appliance -> OVA) (Might consider adding Host-Only Adapter)
 
+- sudo sed -i "s/\mirrors\.kernel\.org/old\-releases\.ubuntu\.com/g" /etc/apt/sources.list
+- sudo sed -i -e 's/archive.ubuntu.com\|security.ubuntu.com/old-releases.ubuntu.com/g' /etc/apt/sources.list
 - Install (BWM-NG) (Write Script to install)
+- Install TCP Replay
 
 Demonstrator Application
-
