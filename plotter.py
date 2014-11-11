@@ -2,9 +2,11 @@
 import sys
 import matplotlib.pyplot as plt
 from time import sleep
+from FlowSampRyu.controller.limit_parser import limit_parser
 
 PARAM_LIST = ['Bandwidth', 'Packet Count']
 PARAM_COUNT = 3
+SOFT_LIMIT = 0.9
 
 
 def start_plotter(plot_log_file):
@@ -15,6 +17,8 @@ def start_plotter(plot_log_file):
     accept_limits = []
     param0_values = []
     param1_values = []
+
+    limit_boundaries = limit_parser('FlowSampRyu/controller/sample.config')
 
     # Prepare Canvas
     plt.ion()
@@ -56,11 +60,10 @@ def start_plotter(plot_log_file):
         ax2.set_xlabel('Time')
         ax2.set_ylabel('Utilisation')
         ax2.plot(range(count), param0_values[-count:], 'b-')
-
-        #Add Limit Code
-        ax2.plot([0, 15], [30, 30], 'r-')
         ax2.set_xlim([0, 15])
         ax2.set_ylim([0, 105])
+	ax2.plot([0, 15], [limit_boundaries[0], limit_boundaries[0]], 'r-')
+	ax2.plot([0, 15], [(SOFT_LIMIT*limit_boundaries[0]), (SOFT_LIMIT*limit_boundaries[0])], 'y-')
         ax2.tick_params(axis='x', colors='c')
         ax2.tick_params(axis='y', colors='c')
         ax2.set_title('Bandwidth Utilisation', color='c')
