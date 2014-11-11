@@ -1,14 +1,15 @@
+from limit_parser import limit_parser
 HARD_MUL = 2
 SOFT_MUL = 1
 
 
 def adjust_accept_limit(params,
-                        limits_config="sample.config",
+                        limits_config="FlowSampRyu/controller/sample.config",
                         soft_limit=0.9):
     """Determines the accept limit for the flows to the monitor.
        Test for proposed idea
     """
-    limits = parse_limits()
+    limits = limit_parser(limits_config)
     bottleneck_severity = 0
     bottleneck_limit = 0
     bottleneck_util = 0
