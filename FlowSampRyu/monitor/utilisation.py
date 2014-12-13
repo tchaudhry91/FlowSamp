@@ -1,23 +1,15 @@
 from subprocess import check_output
 
 
-def link_utilisation(interface, card_limit=100):
-    """Returns the current utilisation of the interface (in %age)
-       input -card_limit -- max speed in Mb/s
-    """
+def link_stats(interface):
+    """ Returns statistics about the interface utilization """
     output = check_output(["bwm-ng", "-o", "csv", "-c", "2", "-I", interface,
-                   "-T", "max"])
-    output = output.split('\n')
-    output = output[-3]
-    bps_total = float(output.split(';')[4])
-    utilisation = (bps_total * 8) / float(card_limit * 1024 * 1024)
-    return int(utilisation * 100)
-
-def packets_total(interface):
-    """Returns the total packets in/out on the specified interface"""
-    output = check_output(["bwm-ng", "-o", "csv", "-c", "2", "-I", interface,
-                    "-T", "max"])
-    output = output.split('\n')
-    output = output[-3]
-    packets_total = float(output.split(';')[7])
-    return int(packets_total)
+                           "-T", "max"])
+    output = output.strip().split('\n')
+    # use the second measurement, only interface (not total)
+    output = output[-2].split(';')
+    result = {
+        'throughput': float(output[4]) * 8,  # bit/s
+        'packets/sec': int(float(output[7])),
+    }
+    return result

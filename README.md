@@ -17,7 +17,7 @@ VM Setup Instructions:
 
 
 Demonstrator Application
-- The Demonstrator requires working 'X' Server. The default installation does not come with one, however ssh -Y works fine and can be used. So 'ssh -Y ryu@xyzhost' should suffice.
+- The Demonstrator requires working 'X' Server. The default installation does not come with one, however ssh -X works fine and can be used. So 'ssh -X ryu@xyzhost' should suffice.
 - For the basic Demonstrator, just run the following:
 	* ./flow_samp_testbed.py pcap pcap_multiplier (use -h for more info)
 
@@ -28,4 +28,4 @@ Demonstrator Application
 	* Limits -> Edit the file in FlowSampRyu/controller/sample.config (Keep the same structure)
 
 IMPORTANT ->
-Should you use Ctrl+C to kill the application, not all internal applications will be killed. So use the ./clearup.sh script to clean up before re-running.
+Should you use Ctrl+C to kill the application, not all internal applications will be killed. So use the ./cleanup.sh script to clean up before re-running.

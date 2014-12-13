@@ -47,7 +47,7 @@ def start_plotter(plot_log_file):
         # Accept Limit Plot
         ax1 = fig.add_subplot(2, 1, 2, axisbg='grey')
         ax1.set_xlabel('Time')
-        ax1.set_ylabel('Accept Limit')
+        ax1.set_ylabel('Accept Limit [%]')
         ax1.plot(range(count), accept_limits[-count:], 'b-')
         ax1.set_xlim([0, 15])
         ax1.set_ylim([0, 105])
@@ -58,7 +58,7 @@ def start_plotter(plot_log_file):
         # Bandwidth Plot
         ax2 = fig.add_subplot(2, 2, 1, axisbg='grey')
         ax2.set_xlabel('Time')
-        ax2.set_ylabel('Utilisation')
+        ax2.set_ylabel('Utilisation [%]')
         ax2.plot(range(count), param0_values[-count:], 'b-')
         ax2.set_xlim([0, 15])
         ax2.set_ylim([0, 105])

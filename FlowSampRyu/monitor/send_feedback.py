@@ -5,16 +5,26 @@ import socket
 import struct
 from time import sleep
 from argparse import ArgumentParser
+from ConfigParser import SafeConfigParser
 
 
 def send_feedback(sock, ip, port, interface):
     """Build and Send Feedback to the Controller"""
     # Build
-    bandwidth = utilisation.link_utilisation(interface)
-    packets_total = utilisation.packets_total(interface)
-    message = struct.pack("!II", bandwidth, packets_total)
-    print("Bandwidth = " + str(bandwidth))
-    print("Packets Total = " + str(packets_total))
+    # Observed Values
+    link_data = utilisation.link_stats(interface)
+    # Hardware Specifications (Read from config)
+    parser = SafeConfigParser()
+    parser.read('FlowSampRyu/monitor/monitor_specification.ini')
+    config_link_tp = int(parser.get('monitor_spcifications',
+                                    'max_link_tp')
+    max_link_tp = config_link_tp * 1024 ** 2  # 100 Mbit/sec
+    # compute relative throughput
+    rel_throughput = int(link_data['throughput'] * 100 / max_link_tp)
+    packets_per_sec = link_data['packets/sec']
+    message = struct.pack("!II", rel_throughput, packets_per_sec)
+    print("Relative througput = " + str(rel_throughput))
+    print("Packets per second = " + str(packets_per_sec))
     sock.sendto(message, (ip, port))
 
 
