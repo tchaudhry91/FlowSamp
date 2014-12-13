@@ -15,9 +15,9 @@ def send_feedback(sock, ip, port, interface):
     link_data = utilisation.link_stats(interface)
     # Hardware Specifications (Read from config)
     parser = SafeConfigParser()
-    parser.read('FlowSampRyu/monitor/monitor_specification.ini')
-    config_link_tp = int(parser.get('monitor_spcifications',
-                                    'max_link_tp')
+    parser.read('FlowSampRyu/monitor/monitor_specifications.ini')
+    config_link_tp = int(parser.get('monitor_specifications',
+                                    'max_link_tp'))
     max_link_tp = config_link_tp * 1024 ** 2  # 100 Mbit/sec
     # compute relative throughput
     rel_throughput = int(link_data['throughput'] * 100 / max_link_tp)
@@ -42,7 +42,7 @@ def main():
         send_feedback(sock, args.controllerIP,
                      int(args.connectionPort),
                      args.monitorInterface)
-        sleep(2)
+        sleep(1)
 
 
 if __name__ == "__main__":

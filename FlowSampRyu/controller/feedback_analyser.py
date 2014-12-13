@@ -4,7 +4,7 @@ SOFT_MUL = 1
 
 
 def adjust_accept_limit(params,
-                        limits_config="FlowSampRyu/controller/sample.config",
+                        limits_config="FlowSampRyu/controller/controller_config.ini",
                         soft_limit=0.9):
     """Determines the accept limit for the flows to the monitor.
        Test for proposed idea

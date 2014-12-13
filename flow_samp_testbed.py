@@ -32,7 +32,7 @@ def launch():
 
     root.cmd('ryu-manager FlowSampRyu.controller.flow_samp &')
     monitor.cmd('python2 FlowSampRyu/monitor/send_feedback.py 10.0.1.2 12000 m1-eth0 &')
-    source.cmd('tcpreplay -i s1-eth0 -x ' + args.pcap_multiplier + ' ' + args.pcap + ' &')
+    source.cmd('tcpreplay -i s1-eth0 -x ' + args.pcap_multiplier + ' ' + args.pcap + '  &')
 
     start_plotter('PlotLogs/values.log')
 

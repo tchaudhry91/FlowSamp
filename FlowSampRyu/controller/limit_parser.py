@@ -1,11 +1,11 @@
 # coding: utf-8
+from ConfigParser import SafeConfigParser
 
-def limit_parser(limits_file='sample.config'):
+def limit_parser(limits_file):
     """Parse The Limits File and Return a list with the limits"""
     limits = []
-    with open(limits_file) as file_handle:
-        for line in file_handle:
-            limit = line.split(' ', 1)[0]
-            if limit:
-                limits.append(float(limit))
+    parser = SafeConfigParser()
+    parser.read(limits_file)
+    for item in parser.items('limits'):
+        limits.append(float(item[1]))
     return limits
