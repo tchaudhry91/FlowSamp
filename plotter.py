@@ -18,7 +18,7 @@ def start_plotter(plot_log_file):
     param0_values = []
     param1_values = []
 
-    limit_boundaries = limit_parser('FlowSampRyu/controller/sample.config')
+    limit_boundaries = limit_parser('FlowSampRyu/controller/controller_config.ini')
 
     # Prepare Canvas
     plt.ion()
@@ -26,6 +26,7 @@ def start_plotter(plot_log_file):
     rect = fig.patch
     rect.set_facecolor('#31312e')
     count = 0
+    print 'Starting Plotter..'
     while True:
         plt.clf()
         count = 0
@@ -78,9 +79,8 @@ def start_plotter(plot_log_file):
         ax3.tick_params(axis='y', colors='c')
         ax3.set_title('Packets Limit', color='c')
 
-        print 'Plotting'
         plt.draw()
-        sleep(2)
+        sleep(0.5)
 
 if __name__ == "__main__":
     start_plotter(sys.argv[1])
