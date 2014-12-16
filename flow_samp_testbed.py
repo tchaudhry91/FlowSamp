@@ -8,12 +8,24 @@ from topology import TestTopo, configureRootConnection
 from plotter import start_plotter
 from argparse import ArgumentParser
 
+
 def launch():
-    """Start The Main Testbed"""
+    """Start The Main Testbed
+
+    Includes:
+    Starting mininet
+    Creating the topology
+    Provide initial configuration to nodes
+    Start actual testbed commands:
+        Start the FlowSamp application on the Controller
+        Start the Feedback loop on the monitor
+        Replay a Pcap across the two nodes
+        Start the Plotter
+    """
     parser = ArgumentParser()
     add_arguments(parser)
-    args = parser.parse_args()	
-	
+    args = parser.parse_args()
+
     # Build Topology
     topo = TestTopo()
     net = Mininet(topo=topo, controller=RemoteController)
@@ -31,18 +43,23 @@ def launch():
     configureRootConnection(root, monitor)
 
     root.cmd('ryu-manager FlowSampRyu.controller.flow_samp &')
-    monitor.cmd('python2 FlowSampRyu/monitor/send_feedback.py 10.0.1.2 12000 m1-eth0 &')
-    source.cmd('tcpreplay -i s1-eth0 -x ' + args.pcap_multiplier + ' ' + args.pcap + '  &')
+    monitor.cmd('python2 FlowSampRyu/monitor/send_feedback.py' +
+                ' 10.0.1.2 12000 m1-eth0 &')
+    source.cmd('tcpreplay -i s1-eth0 -x ' + args.pcap_multiplier +
+               ' ' + args.pcap + '  &')
 
     start_plotter('PlotLogs/values.log')
 
     # Stop Network
     net.stop()
 
+
 def add_arguments(parser):
     """Add and Parse command Line Options"""
-    parser.add_argument("pcap", help=("The Pcap File you would like to Replay"))
-    parser.add_argument("pcap_multiplier", help=("The rate at which the Pcap should be replayed"))
+    parser.add_argument("pcap", help=("The Pcap File you would" +
+                        " like to Replay"))
+    parser.add_argument("pcap_multiplier", help=("The rate at" +
+                        " which the Pcap should be replayed"))
 
 if __name__ == "__main__":
     launch()

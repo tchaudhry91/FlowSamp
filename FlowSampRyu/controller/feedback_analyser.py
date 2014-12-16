@@ -4,16 +4,18 @@ SOFT_MUL = 1
 
 
 def adjust_accept_limit(params,
-                        limits_config="FlowSampRyu/controller/controller_config.ini",
+                        limits_config="FlowSampRyu/controller/" +
+                                      "controller_config.ini",
                         soft_limit=0.9):
     """Determines the accept limit for the flows to the monitor.
-       Test for proposed idea
+    Test for proposed idea.
+    Algorithm Supplied in Adapdation.txt separately
     """
     limits = limit_parser(limits_config)
     bottleneck_severity = 0
     bottleneck_limit = 0
     bottleneck_util = 0
-    adaptation = 0 
+    adaptation = 0
     mul = SOFT_MUL
     reduction = False
 
@@ -27,9 +29,9 @@ def adjust_accept_limit(params,
                 reduction = True
             if params[i] > limits[i]:
                 mul = HARD_MUL
- 
+
     adaptation = mul * ((bottleneck_limit - bottleneck_util) /
-                         float(bottleneck_limit))
+                        float(bottleneck_limit))
     if adaptation < -1:
         adaptation = -1
     return (1+adaptation)

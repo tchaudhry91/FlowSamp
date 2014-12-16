@@ -9,7 +9,13 @@ from ConfigParser import SafeConfigParser
 
 
 def send_feedback(sock, ip, port, interface):
-    """Build and Send Feedback to the Controller"""
+    """Build and Send Feedback to the Controller
+    @param sock = the socket (UDP) to use to send the feedback
+    @param ip = the ip of the controller
+    @param port = port on which the controller is listening
+    @param interface = the interface for which the stats should be
+                       calculated
+    """
     # Build
     # Observed Values
     link_data = utilisation.link_stats(interface)
@@ -29,7 +35,11 @@ def send_feedback(sock, ip, port, interface):
 
 
 def main():
-    """The main function"""
+    """The main function
+    Add and parse the arguments.
+    Create the UDP socket for connection with the controller
+    Start the feedback loop
+    """
     parser = ArgumentParser(description="Send Feedback to Controller")
     parser.add_argument("controllerIP", help="The Controller's IP")
     parser.add_argument("connectionPort",
@@ -40,8 +50,8 @@ def main():
                          socket.SOCK_DGRAM)
     while True:
         send_feedback(sock, args.controllerIP,
-                     int(args.connectionPort),
-                     args.monitorInterface)
+                      int(args.connectionPort),
+                      args.monitorInterface)
         sleep(1)
 
 

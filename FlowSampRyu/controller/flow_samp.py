@@ -22,6 +22,11 @@ PLOT_LOG_FILE = 'PlotLogs/values.log'
 
 
 class FlowSamp(app_manager.RyuApp):
+    """The Default Class For the Ryu Flow Samp Application
+    Extends the simple learning switch provided in the Ryu Documentation
+    https://github.com/osrg/ryu/blob/master/ryu/app/simple_switch.py
+    Contains own extension for the Adaptaion in packet_in
+    """
     OFP_VERSIONS = [ofproto_v1_3.OFP_VERSION]
 
     def __init__(self, *args, **kwargs):
@@ -49,6 +54,12 @@ class FlowSamp(app_manager.RyuApp):
         self.add_flow(datapath, 0, match, actions)
 
     def add_flow(self, datapath, priority, match, actions):
+        """Add a particular flow
+        @param datapath = router/switch
+        @param priority = priority of the flow
+        @param match = the rule differentiating the flow from the rest
+        @action = usually decision if to be sent to monitor as well or not
+        """
         ofproto = datapath.ofproto
         parser = datapath.ofproto_parser
 
@@ -61,6 +72,7 @@ class FlowSamp(app_manager.RyuApp):
 
     @set_ev_cls(ofp_event.EventOFPPacketIn, MAIN_DISPATCHER)
     def _packet_in_handler(self, ev):
+        """The main packet_in handler, add logic here"""
         msg = ev.msg
         datapath = msg.datapath
         ofproto = datapath.ofproto

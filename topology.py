@@ -10,6 +10,13 @@ from mininet.topo import Topo
 
 
 class TestTopo(Topo):
+    """The Topology for the testbed:
+    Source------OFSwitch------Sink
+                 |    |
+      Controller_|    |___Monitor
+           |_______________|
+             Feedback Link
+    """
     def __init__(self):
         Topo.__init__(self)
 
@@ -24,7 +31,11 @@ class TestTopo(Topo):
         self.addLink(sink, switch)
         self.addLink(monitor, root)
 
+
 def configureRootConnection(root, monitor):
+    """Configure Feedback link properly, different subnet
+    Add Host Routes properly on both monitor and client
+    """
     root.setIP(intf="root-eth0", ip="10.0.1.2/24")
     monitor.setIP(intf="m1-eth1", ip="10.0.1.1/24")
     monitor.setIP(intf='m1-eth0', ip="10.0.0.1/24")
