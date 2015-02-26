@@ -11,7 +11,7 @@ Contents:
 .. toctree::
    :maxdepth: 4
 
-   sdn_flowsampling
+    tutorial
 
 
 Indices and tables

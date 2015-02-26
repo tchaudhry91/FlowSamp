@@ -44,6 +44,10 @@ class FlowSamp(app_manager.RyuApp):
 
     @set_ev_cls(ofp_event.EventOFPSwitchFeatures, CONFIG_DISPATCHER)
     def switch_features_handler(self, ev):
+	"""The handler to extract the features of the Switch (Datapath).
+	 The event here contains all the information a switch sends on it's
+	first connection to the controller, such as, OpenFlow version in use
+	et cetra"""
         datapath = ev.msg.datapath
         ofproto = datapath.ofproto
         parser = datapath.ofproto_parser
@@ -98,7 +102,7 @@ class FlowSamp(app_manager.RyuApp):
 
         # self.logger.info("packet in %s %s %s %s %s", dpid, src, dst,
         #                 ipv4_src, ipv4_dst)
-        self.flow_string = self.build_flow_string(dpid, src, dst,
+        self.flow_string = self.build_flow_string(src, dst,
                                                   ipv4_src, ipv4_dst)
 
         # Learn a mac address to avoid FLOOD next time.
@@ -157,7 +161,7 @@ class FlowSamp(app_manager.RyuApp):
         """Checks the new incoming flow and makes a decision based on
            last known monitor load.
         """
-        flow_hash = hash_flow(flow_string)
+        flow_hash = hash_flow(''.join(sorted(flow_string)))
         if flow_hash <= self.accept_limit:
             return True
         else:

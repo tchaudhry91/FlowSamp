@@ -1,0 +1,177 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>&lt;no title&gt; &mdash; .  documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title=".  documentation" href="index.html" />
+    <link rel="prev" title="Welcome to .’s documentation!" href="index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to .’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">.  documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p>Note - All commands &#8216;sudo&#8217; unless otherwise specified.
+VM Setup Instructions:
+- Download VM From <a class="reference external" href="http://sourceforge.net/projects/ryu/files/vmimages/OpenFlowTutorial/">http://sourceforge.net/projects/ryu/files/vmimages/OpenFlowTutorial/</a></p>
+<blockquote>
+<div><ul>
+<li><p class="first">(OpenFlow_Tutorial_Ryu3.6.ova)</p>
+</li>
+<li><p class="first">Setup the VM (In Virtual Box, Import Appliance -&gt; OVA)
+- Add a Host-Only Network Adapter (Varies on Different Operating Systems). This will be used to SSH into this machine.</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Boot up the VM, (user - ryu, password - ryu)
+- Clone the Repository, you may also consider copying over the Pcap which you wish to replay.</p>
+<blockquote>
+<div><ul>
+<li><p class="first">This application requires &#8216;tcpreplay&#8217; and &#8216;bwm-ng&#8217;. There is a requirement installation script which will take care of all the pre-requisites.
+- Run the requirements_install_script.sh . This should install the pre-requisites.</p>
+<blockquote>
+<div><ul class="simple">
+<li>The setup should now be complete.</li>
+</ul>
+<p>Demonstrator Application
+- The Demonstrator requires working &#8216;X&#8217; Server. The default installation does not come with one, however ssh -X works fine and can be used. So &#8216;ssh -X <a class="reference external" href="mailto:ryu&#37;&#52;&#48;xyzhost">ryu<span>&#64;</span>xyzhost</a>&#8216; should suffice.</p>
+<blockquote>
+<div><ul>
+<li><dl class="first docutils">
+<dt>For the basic Demonstrator, just run the following:</dt>
+<dd><ul class="first simple">
+<li>./flow_samp_testbed.py pcap pcap_multiplier (use -h for more info)</li>
+</ul>
+<ul class="last">
+<li><dl class="first docutils">
+<dt>The following options can be changed:</dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>Pcap -&gt; The file you want to replay</dt>
+<dd><dl class="first last docutils">
+<dt>-&gt; Can be changed as a command line argument.</dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>Pcap Multiplier -&gt; The multiplier at which the pcap should be replayed.</dt>
+<dd><ul class="first simple">
+<li>Limits -&gt; Edit the file in FlowSampRyu/controller/sample.config (Keep the same structure)</li>
+</ul>
+<p class="last">IMPORTANT -&gt;
+Should you use Ctrl+C to kill the application, not all internal applications will be killed. So use the ./cleanup.sh script to clean up before re-running.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to .&#8217;s documentation!</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/Tutorial.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Author.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3b3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.6.3</a>
+      
+      |
+      <a href="_sources/Tutorial.txt"
+          rel="nofollow">Page source</a></li>
+    </div>
+
+    
+
+    
+  </body>
+</html>
