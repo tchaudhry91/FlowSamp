@@ -13,7 +13,7 @@ SETUP: Note - All commands 'sudo' unless otherwise specified. VM Setup Instructi
     * Boot up the VM, (user - ryu, password - ryu)
     * Clone the Repository, you may also consider copying over the Pcap which you wish to replay.
     * This application requires 'tcpreplay' and 'bwm-ng'. There is a requirement installation script which will take care of all the pre-requisites::
-      sudo ./requirement_install_script.sh
+      `` sudo ./requirement_install_script.sh``
   * Setup Should Now be Complete
 
 * Demonstrator Application
