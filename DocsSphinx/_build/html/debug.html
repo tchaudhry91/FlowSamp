@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>&lt;no title&gt; &mdash; SDN Flow Sampler 0.9 documentation</title>
+    <title>Debug/Developer Mode &mdash; SDN Flow Sampler 0.9 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -25,6 +25,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="SDN Flow Sampler 0.9 documentation" href="index.html" />
+    <link rel="prev" title="FlowSampling Demonstrator Tutorial" href="tutorial.html" />
    
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
@@ -37,6 +38,9 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="tutorial.html" title="FlowSampling Demonstrator Tutorial"
+             accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">SDN Flow Sampler 0.9 documentation</a> &raquo;</li> 
       </ul>
     </div>  
@@ -46,13 +50,56 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  
+  <div class="section" id="debug-developer-mode">
+<h1>Debug/Developer Mode<a class="headerlink" href="#debug-developer-mode" title="Permalink to this headline">¶</a></h1>
+<ul>
+<li><p class="first">This application can be a little hard to debug as the components do not present any output on the main application screen. To easily see all those debugging print statements please run the application as follows:</p>
+<ul>
+<li><p class="first">Run the flow_samp_testbed_debug.py instead of the normal one</p>
+</li>
+<li><p class="first">This will not autostart any components in the systems (e.g monitor, controller etc.)</p>
+</li>
+<li><p class="first">This must now be done manually using individual windows for each component so it is easy to observe their debug output</p>
+</li>
+<li><p class="first">Take a look at the following lines commented out in the flow_samp_testbed_debug.py:</p>
+<div class="highlight-python"><div class="highlight"><pre>root.cmd(&#39;ryu-manager FlowSampRyu.controller.flow_samp &amp;&#39;)
+monitor.cmd(&#39;python2 FlowSampRyu/monitor/send_feedback.py&#39; + 10.0.1.2 12000 m1-eth0 &amp;&#39;)
+source.cmd(&#39;tcpreplay -i s1-eth0 -x &#39; + args.pcap_multiplier + &#39; &#39; + args.pcap + &#39;  &amp;&#39;)
+start_plotter(&#39;PlotLogs/values.log&#39;)
+</pre></div>
+</div>
+</li>
+<li><p class="first">These lines must individually be executed on the corresponding different components:</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Mininet should give you a prompt</p>
+</li>
+<li><p class="first">Use this prompt to open terminals for the respective components:</p>
+<div class="highlight-python"><div class="highlight"><pre>xterm m1
+xterm root
+xterm s1
+</pre></div>
+</div>
+</li>
+<li><p class="first">You can then manually run the above mentioned commands in the terminal&#8217;s of the respective components which will also provide debugging feedback</p>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+
 
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tutorial.html"
+                        title="previous chapter">FlowSampling Demonstrator Tutorial</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
