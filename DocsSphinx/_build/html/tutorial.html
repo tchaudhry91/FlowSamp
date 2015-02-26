@@ -59,29 +59,38 @@
 <p>SETUP: Note - All commands &#8216;sudo&#8217; unless otherwise specified. VM Setup Instructions:</p>
 <ul>
 <li><p class="first">Download VM From <a class="reference external" href="http://sourceforge.net/projects/ryu/files/vmimages/OpenFlowTutorial/">http://sourceforge.net/projects/ryu/files/vmimages/OpenFlowTutorial/</a></p>
-<ul class="simple">
-<li>Choose Image : OpenFlow_Tutorial_Ryu3.6.ova</li>
-<li>Setup the VM in Virtual Box:<ul>
-<li>Import Appliance -&gt; OVA</li>
-<li>Add a Host-Only Network Adapter (Varies on Different Operating Systems). This will be used to SSH into this machine.</li>
-<li>Boot up the VM, (user - ryu, password - ryu)</li>
-<li>Clone the Repository, you may also consider copying over the Pcap which you wish to replay.</li>
-<li>This application requires &#8216;tcpreplay&#8217; and &#8216;bwm-ng&#8217;. There is a requirement installation script which will take care of all the pre-requisites::
-`` sudo ./requirement_install_script.sh``</li>
+<ul>
+<li><p class="first">Choose Image : OpenFlow_Tutorial_Ryu3.6.ova</p>
+</li>
+<li><p class="first">Setup the VM in Virtual Box:</p>
+<ul>
+<li><p class="first">Import Appliance -&gt; OVA</p>
+</li>
+<li><p class="first">Add a Host-Only Network Adapter (Varies on Different Operating Systems). This will be used to SSH into this machine.</p>
+</li>
+<li><p class="first">Boot up the VM, (user - ryu, password - ryu)</p>
+</li>
+<li><p class="first">Clone the Repository, you may also consider copying over the Pcap which you wish to replay.</p>
+</li>
+<li><p class="first">This application requires &#8216;tcpreplay&#8217; and &#8216;bwm-ng&#8217;. There is a requirement installation script which will take care of all the pre-requisites:</p>
+<div class="highlight-python"><div class="highlight"><pre>sudo ./requirement_install_script.sh
+</pre></div>
+</div>
+</li>
 </ul>
 </li>
-<li>Setup Should Now be Complete</li>
+<li><p class="first">Setup Should Now be Complete</p>
+</li>
 </ul>
 </li>
 <li><p class="first">Demonstrator Application</p>
 <ul>
 <li><p class="first">The Demonstrator requires working &#8216;X&#8217; Server. The default installation does not come with one, however ssh -X works fine and can be used. So &#8216;ssh -X <a class="reference external" href="mailto:ryu&#37;&#52;&#48;xyzhost">ryu<span>&#64;</span>xyzhost</a>&#8216; should suffice.</p>
 </li>
-<li><dl class="first docutils">
-<dt>For the basic Demonstrator, just run the following::</dt>
-<dd><p class="first last">./flow_samp_testbed.py pcap pcap_multiplier (use -h for more info)</p>
-</dd>
-</dl>
+<li><p class="first">For the basic Demonstrator, just run the following:</p>
+<div class="highlight-python"><div class="highlight"><pre>./flow_samp_testbed.py pcap pcap_multiplier (use -h for more info)
+</pre></div>
+</div>
 </li>
 <li><p class="first">The following options can be changed:</p>
 <blockquote>
